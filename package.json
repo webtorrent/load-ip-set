@@ -3,7 +3,6 @@
   "description": "download and parse ip-set (blocklist) files",
   "version": "1.0.1",
   "author": "Feross Aboukhadijeh <feross@feross.org> (http://feross.org/)",
-  "bin": "./bin/cmd.js",
   "bugs": {
     "url": "https://github.com/feross/load-ip-set/issues"
   },
