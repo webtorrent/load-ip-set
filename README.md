@@ -16,7 +16,7 @@ Given one of the following:
 
 - http/https url (gzip, deflate, or no compression)
 - filesystem path (gzip, or no compression)
-- array of `{ start: 0, end: 0 }` objects
+- array of ip addresses or `{ start: '1.2.3.0', end: '1.2.3.255' }` ip ranges
 
 this module loads the ip set (downloading from the network, if necessary) and returns an [ip-set](https://www.npmjs.org/package/ip-set) object. An `ip-set` is just a mutable set data structure optimized for use with IPv4 and IPv6 addresses.
 
