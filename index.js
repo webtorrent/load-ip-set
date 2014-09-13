@@ -10,7 +10,7 @@ var blocklistRe = /^\s*[^#].*?\s*:\s*([a-f0-9.:]+?)\s*-\s*([a-f0-9.:]+?)\s*$/
 
 module.exports = function loadIPSet (input, cb) {
   cb = once(cb)
-  if (Array.isArray(input)) {
+  if (Array.isArray(input) || !input) {
     process.nextTick(function () {
       cb(null, new ipSet(input))
     })
