@@ -28,7 +28,7 @@ module.exports = function loadIPSet (input, cb) {
       res.on('error', cb)
       var encoding = res.headers['content-encoding']
       if (encoding === 'gzip') {
-        onStream(res.pipe(zlib.Gunzip()))
+        onStream(res.pipe(zlib.Gunzip().on('error', cb)))
       } else if (encoding === 'deflate') {
         onStream(res.pipe(zlib.createInflate().on('error', cb)))
       } else
