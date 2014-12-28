@@ -15,19 +15,20 @@ module.exports = function loadIPSet (input, cb) {
     })
   } else if (/^https?:\/\//.test(input)) {
     get(input, function (err, res) {
-      res.on('error', cb)
+      if (err) return cb(err)
       onStream(res)
     })
   } else {
     var f = fs.createReadStream(input).on('error', cb)
     if (/.gz$/.test(input))
-      f = f.pipe(zlib.Gunzip().on('error', cb))
+      f = f.pipe(zlib.Gunzip())
     onStream(f)
   }
 
   function onStream (stream) {
     var blocklist = []
     stream
+      .on('error', cb)
       .pipe(split())
       .on('data', function (line) {
         var match = blocklistRe.exec(line)
