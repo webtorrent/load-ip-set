@@ -29,6 +29,20 @@ loadIPSet('http://example.com/list.txt', function (err, ipSet) {
 })
 ```
 
+The second argument can be an optional `opts` object which will be passed to
+[`simple-get`](https://npmjs.com/package/simple-get) and the node.js core `http.request`
+method. This is useful for setting the user agent, for example.
+
+```js
+loadIPSet('http://example.com/list.txt', {
+  headers: {
+    'user-agent': 'WebTorrent (http://webtorrent.io)'
+  }
+}, function (err, ipSet) {
+
+})
+```
+
 ### license
 
 MIT. Copyright (c) [Feross Aboukhadijeh](http://feross.org).

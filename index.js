@@ -7,14 +7,19 @@ var zlib = require('zlib')
 
 var blocklistRe = /^\s*[^#].*?\s*:\s*([a-f0-9.:]+?)\s*-\s*([a-f0-9.:]+?)\s*$/
 
-module.exports = function loadIPSet (input, cb) {
+module.exports = function loadIPSet (input, opts, cb) {
+  if (typeof opts === 'function') {
+    cb = opts
+    opts = {}
+  }
   cb = once(cb)
   if (Array.isArray(input) || !input) {
     process.nextTick(function () {
       cb(null, new ipSet(input))
     })
   } else if (/^https?:\/\//.test(input)) {
-    get(input, function (err, res) {
+    opts.url = input
+    get(opts, function (err, res) {
       if (err) return cb(err)
       onStream(res)
     })

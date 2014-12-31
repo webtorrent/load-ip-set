@@ -51,6 +51,28 @@ test('http url', function (t) {
   })
 })
 
+test('http url (with custom user agent)', function (t) {
+  t.plan(10)
+  var server = http.createServer(function (req, res) {
+    t.equal(req.headers['user-agent'], 'WebTorrent (http://webtorrent.io)')
+    fs.createReadStream(__dirname + '/list.txt')
+      .pipe(res)
+  })
+  portfinder.getPort(function (err, port) {
+    if (err) throw err
+    var url = 'http://127.0.0.1:' + port
+    server.listen(port, function () {
+      loadIPSet(url, {
+        headers: { 'user-agent': 'WebTorrent (http://webtorrent.io)'}
+      }, function (err, ipSet) {
+        if (err) throw err
+        checkList(t, ipSet)
+        server.close()
+      })
+    })
+  })
+})
+
 test('http url with gzip encoding', function (t) {
   t.plan(9)
   var server = http.createServer(function (req, res) {
