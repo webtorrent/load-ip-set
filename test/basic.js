@@ -5,7 +5,7 @@ var portfinder = require('portfinder')
 var test = require('tape')
 var zlib = require('zlib')
 
-test('array', function (t) {
+test('array of IPs', function (t) {
   t.plan(5)
   loadIPSet([ '1.2.3.4' ], function (err, ipSet) {
     if (err) throw err
@@ -31,6 +31,17 @@ function checkList (t, ipSet) {
   t.ok(!ipSet.contains('1.1.1.1'))
   t.ok(!ipSet.contains('2.2.2.2'))
 }
+
+test('array of IP ranges', function (t) {
+  t.plan(9)
+  loadIPSet([
+    { start: '1.2.3.0', end: '1.2.3.255' },
+    { start: '5.6.7.0', end: '5.6.7.255' }
+  ], function (err, ipSet) {
+    if (err) throw err
+    checkList(t, ipSet)
+  })
+})
 
 test('http url', function (t) {
   t.plan(9)
