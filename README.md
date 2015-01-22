@@ -1,4 +1,11 @@
-# load-ip-set [![travis](https://img.shields.io/travis/feross/load-ip-set.svg)](https://travis-ci.org/feross/load-ip-set) [![npm](https://img.shields.io/npm/v/load-ip-set.svg)](https://npmjs.org/package/load-ip-set) [![downloads](https://img.shields.io/npm/dm/load-ip-set.svg)](https://npmjs.org/package/load-ip-set) [![gittip](https://img.shields.io/gittip/feross.svg)](https://www.gittip.com/feross/)
+# load-ip-set [![travis][travis-image]][travis-url] [![npm][npm-image]][npm-url] [![downloads][downloads-image]][downloads-url]
+
+[travis-image]: https://img.shields.io/travis/feross/load-ip-set.svg?style=flat
+[travis-url]: https://travis-ci.org/feross/load-ip-set
+[npm-image]: https://img.shields.io/npm/v/load-ip-set.svg?style=flat
+[npm-url]: https://npmjs.org/package/load-ip-set
+[downloads-image]: https://img.shields.io/npm/dm/load-ip-set.svg?style=flat
+[downloads-url]: https://npmjs.org/package/load-ip-set
 
 #### download and parse ip-set (blocklist) files
 
