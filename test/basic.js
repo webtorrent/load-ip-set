@@ -1,7 +1,6 @@
 var fs = require('fs')
 var http = require('http')
 var loadIPSet = require('../')
-var portfinder = require('portfinder')
 var test = require('tape')
 var zlib = require('zlib')
 
@@ -49,15 +48,12 @@ test('http url', function (t) {
     fs.createReadStream(__dirname + '/list.txt')
       .pipe(res)
   })
-  portfinder.getPort(function (err, port) {
-    if (err) throw err
-    var url = 'http://127.0.0.1:' + port
-    server.listen(port, function () {
-      loadIPSet(url, function (err, ipSet) {
-        if (err) throw err
-        checkList(t, ipSet)
-        server.close()
-      })
+  server.listen(0, function () {
+    var url = 'http://127.0.0.1:' + server.address().port
+    loadIPSet(url, function (err, ipSet) {
+      if (err) throw err
+      checkList(t, ipSet)
+      server.close()
     })
   })
 })
@@ -69,17 +65,14 @@ test('http url (with custom user agent)', function (t) {
     fs.createReadStream(__dirname + '/list.txt')
       .pipe(res)
   })
-  portfinder.getPort(function (err, port) {
-    if (err) throw err
-    var url = 'http://127.0.0.1:' + port
-    server.listen(port, function () {
-      loadIPSet(url, {
-        headers: { 'user-agent': 'WebTorrent (http://webtorrent.io)'}
-      }, function (err, ipSet) {
-        if (err) throw err
-        checkList(t, ipSet)
-        server.close()
-      })
+  server.listen(0, function () {
+    var url = 'http://127.0.0.1:' + server.address().port
+    loadIPSet(url, {
+      headers: { 'user-agent': 'WebTorrent (http://webtorrent.io)'}
+    }, function (err, ipSet) {
+      if (err) throw err
+      checkList(t, ipSet)
+      server.close()
     })
   })
 })
@@ -92,15 +85,12 @@ test('http url with gzip encoding', function (t) {
       .pipe(zlib.createGzip())
       .pipe(res)
   })
-  portfinder.getPort(function (err, port) {
-    if (err) throw err
-    var url = 'http://127.0.0.1:' + port
-    server.listen(port, function () {
-      loadIPSet(url, function (err, ipSet) {
-        if (err) throw err
-        checkList(t, ipSet)
-        server.close()
-      })
+  server.listen(0, function () {
+    var url = 'http://127.0.0.1:' + server.address().port
+    loadIPSet(url, function (err, ipSet) {
+      if (err) throw err
+      checkList(t, ipSet)
+      server.close()
     })
   })
 })
@@ -113,15 +103,12 @@ test('http url with deflate encoding', function (t) {
       .pipe(zlib.createDeflate())
       .pipe(res)
   })
-  portfinder.getPort(function (err, port) {
-    if (err) throw err
-    var url = 'http://127.0.0.1:' + port
-    server.listen(port, function () {
-      loadIPSet(url, function (err, ipSet) {
-        if (err) throw err
-        checkList(t, ipSet)
-        server.close()
-      })
+  server.listen(0, function () {
+    var url = 'http://127.0.0.1:' + server.address().port
+    loadIPSet(url, function (err, ipSet) {
+      if (err) throw err
+      checkList(t, ipSet)
+      server.close()
     })
   })
 })
