@@ -1,6 +1,6 @@
 var fs = require('fs')
 var get = require('simple-get')
-var ipSet = require('ip-set')
+var IPSet = require('ip-set')
 var once = require('once')
 var split = require('split')
 var zlib = require('zlib')
@@ -15,7 +15,7 @@ module.exports = function loadIPSet (input, opts, cb) {
   cb = once(cb)
   if (Array.isArray(input) || !input) {
     process.nextTick(function () {
-      cb(null, new ipSet(input))
+      cb(null, new IPSet(input))
     })
   } else if (/^https?:\/\//.test(input)) {
     opts.url = input
@@ -25,8 +25,7 @@ module.exports = function loadIPSet (input, opts, cb) {
     })
   } else {
     var f = fs.createReadStream(input).on('error', cb)
-    if (/.gz$/.test(input))
-      f = f.pipe(zlib.Gunzip())
+    if (/.gz$/.test(input)) f = f.pipe(zlib.Gunzip())
     onStream(f)
   }
 
@@ -40,7 +39,7 @@ module.exports = function loadIPSet (input, opts, cb) {
         if (match) blocklist.push({ start: match[1], end: match[2] })
       })
       .on('end', function () {
-        cb(null, new ipSet(blocklist))
+        cb(null, new IPSet(blocklist))
       })
   }
 }

@@ -16,6 +16,7 @@
     "split": "^1.0.0"
   },
   "devDependencies": {
+    "standard": "^4.0.1",
     "tape": "^4.0.0"
   },
   "homepage": "https://github.com/feross/load-ip-set",
@@ -36,6 +37,6 @@
     "url": "git://github.com/feross/load-ip-set.git"
   },
   "scripts": {
-    "test": "tape test/*.js"
+    "test": "standard && tape test/*.js"
   }
 }
