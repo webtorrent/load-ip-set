@@ -68,7 +68,7 @@ test('http url (with custom user agent)', function (t) {
   server.listen(0, function () {
     var url = 'http://127.0.0.1:' + server.address().port
     loadIPSet(url, {
-      headers: { 'user-agent': 'WebTorrent (http://webtorrent.io)'}
+      headers: { 'user-agent': 'WebTorrent (http://webtorrent.io)' }
     }, function (err, ipSet) {
       if (err) throw err
       checkList(t, ipSet)
