@@ -1,6 +1,7 @@
 var fs = require('fs')
 var http = require('http')
 var loadIPSet = require('../')
+var path = require('path')
 var test = require('tape')
 var zlib = require('zlib')
 
@@ -45,7 +46,7 @@ test('array of IP ranges', function (t) {
 test('http url', function (t) {
   t.plan(9)
   var server = http.createServer(function (req, res) {
-    fs.createReadStream(__dirname + '/list.txt')
+    fs.createReadStream(path.join(__dirname, 'list.txt'))
       .pipe(res)
   })
   server.listen(0, function () {
@@ -62,7 +63,7 @@ test('http url (with custom user agent)', function (t) {
   t.plan(10)
   var server = http.createServer(function (req, res) {
     t.equal(req.headers['user-agent'], 'WebTorrent (http://webtorrent.io)')
-    fs.createReadStream(__dirname + '/list.txt')
+    fs.createReadStream(path.join(__dirname, 'list.txt'))
       .pipe(res)
   })
   server.listen(0, function () {
@@ -81,7 +82,7 @@ test('http url with gzip encoding', function (t) {
   t.plan(9)
   var server = http.createServer(function (req, res) {
     res.setHeader('content-encoding', 'gzip')
-    fs.createReadStream(__dirname + '/list.txt')
+    fs.createReadStream(path.join(__dirname, 'list.txt'))
       .pipe(zlib.createGzip())
       .pipe(res)
   })
@@ -99,7 +100,7 @@ test('http url with deflate encoding', function (t) {
   t.plan(9)
   var server = http.createServer(function (req, res) {
     res.setHeader('content-encoding', 'deflate')
-    fs.createReadStream(__dirname + '/list.txt')
+    fs.createReadStream(path.join(__dirname, 'list.txt'))
       .pipe(zlib.createDeflate())
       .pipe(res)
   })
@@ -115,7 +116,7 @@ test('http url with deflate encoding', function (t) {
 
 test('fs path', function (t) {
   t.plan(9)
-  loadIPSet(__dirname + '/list.txt', function (err, ipSet) {
+  loadIPSet(path.join(__dirname, 'list.txt'), function (err, ipSet) {
     if (err) throw err
     checkList(t, ipSet)
   })
@@ -123,7 +124,7 @@ test('fs path', function (t) {
 
 test('fs path with gzip', function (t) {
   t.plan(9)
-  loadIPSet(__dirname + '/list.txt.gz', function (err, ipSet) {
+  loadIPSet(path.join(__dirname, 'list.txt.gz'), function (err, ipSet) {
     if (err) throw err
     checkList(t, ipSet)
   })
