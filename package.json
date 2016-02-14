@@ -12,7 +12,7 @@
   "dependencies": {
     "ip-set": "^1.0.0",
     "once": "^1.3.0",
-    "simple-get": "^1.0.0",
+    "simple-get": "^2.0.0",
     "split": "^1.0.0"
   },
   "devDependencies": {
