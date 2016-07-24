@@ -39,16 +39,34 @@ function checkList (t, ipSet) {
   t.ok(!ipSet.contains('192.168.2.4'))
   t.ok(!ipSet.contains('1.1.1.1'))
   t.ok(!ipSet.contains('2.2.2.2'))
+
+  // CIDR test cases
+
+  t.ok(ipSet.contains('196.168.1.100'))
+  t.ok(!ipSet.contains('196.168.2.100'))
+
+  t.ok(ipSet.contains('194.0.0.0'))
+  t.ok(ipSet.contains('194.255.255.255'))
+  t.ok(ipSet.contains('194.2.3.4'))
+
+  t.ok(ipSet.contains('195.168.3.6'))
+  t.ok(ipSet.contains('195.168.5.222'))
+  t.ok(!ipSet.contains('195.166.1.1'))
 }
 
+var assertionsCount = 26
+
 test('array of IP ranges', function (t) {
-  t.plan(18)
+  t.plan(assertionsCount)
   loadIPSet([
     { start: '1.2.3.0', end: '1.2.3.255' },
     { start: '5.6.7.0', end: '5.6.7.255' },
     { start: '192.168.1.1', end: '192.168.1.230' },
     { start: '192.168.1.240', end: '192.168.1.240' },
-    { start: '192.168.2.5', end: '192.168.2.5' }
+    { start: '192.168.2.5', end: '192.168.2.5' },
+    { start: '194.0.0.0', end: '194.255.255.255' },
+    { start: '195.168.0.0', end: '195.168.255.255' },
+    { start: '196.168.1.0', end: '196.168.1.255' }
   ], function (err, ipSet) {
     if (err) throw err
     checkList(t, ipSet)
@@ -56,7 +74,7 @@ test('array of IP ranges', function (t) {
 })
 
 test('http url', function (t) {
-  t.plan(18)
+  t.plan(assertionsCount)
   var server = http.createServer(function (req, res) {
     fs.createReadStream(path.join(__dirname, 'list.txt'))
       .pipe(res)
@@ -72,7 +90,7 @@ test('http url', function (t) {
 })
 
 test('http url (with custom user agent)', function (t) {
-  t.plan(19)
+  t.plan(assertionsCount + 1)
   var server = http.createServer(function (req, res) {
     t.equal(req.headers['user-agent'], 'WebTorrent (http://webtorrent.io)')
     fs.createReadStream(path.join(__dirname, 'list.txt'))
@@ -91,7 +109,7 @@ test('http url (with custom user agent)', function (t) {
 })
 
 test('http url with gzip encoding', function (t) {
-  t.plan(18)
+  t.plan(assertionsCount)
   var server = http.createServer(function (req, res) {
     res.setHeader('content-encoding', 'gzip')
     fs.createReadStream(path.join(__dirname, 'list.txt'))
@@ -109,7 +127,7 @@ test('http url with gzip encoding', function (t) {
 })
 
 test('http url with deflate encoding', function (t) {
-  t.plan(18)
+  t.plan(assertionsCount)
   var server = http.createServer(function (req, res) {
     res.setHeader('content-encoding', 'deflate')
     fs.createReadStream(path.join(__dirname, 'list.txt'))
@@ -127,7 +145,7 @@ test('http url with deflate encoding', function (t) {
 })
 
 test('fs path', function (t) {
-  t.plan(18)
+  t.plan(assertionsCount)
   loadIPSet(path.join(__dirname, 'list.txt'), function (err, ipSet) {
     if (err) throw err
     checkList(t, ipSet)
@@ -135,7 +153,7 @@ test('fs path', function (t) {
 })
 
 test('fs path with gzip', function (t) {
-  t.plan(18)
+  t.plan(assertionsCount)
   loadIPSet(path.join(__dirname, 'list.txt.gz'), function (err, ipSet) {
     if (err) throw err
     checkList(t, ipSet)
