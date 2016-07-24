@@ -45,8 +45,9 @@ function checkList (t, ipSet) {
   t.ok(ipSet.contains('196.168.1.100'))
   t.ok(!ipSet.contains('196.168.2.100'))
 
-  t.ok(ipSet.contains('194.0.0.0'))
-  t.ok(ipSet.contains('194.255.255.255'))
+  t.ok(!ipSet.contains('194.0.0.0'))
+  t.ok(ipSet.contains('194.0.0.1'))
+  t.ok(ipSet.contains('194.255.255.254'))
   t.ok(ipSet.contains('194.2.3.4'))
 
   t.ok(ipSet.contains('195.168.3.6'))
@@ -54,7 +55,7 @@ function checkList (t, ipSet) {
   t.ok(!ipSet.contains('195.166.1.1'))
 }
 
-var assertionsCount = 26
+var assertionsCount = 27
 
 test('array of IP ranges', function (t) {
   t.plan(assertionsCount)
@@ -64,9 +65,9 @@ test('array of IP ranges', function (t) {
     { start: '192.168.1.1', end: '192.168.1.230' },
     { start: '192.168.1.240', end: '192.168.1.240' },
     { start: '192.168.2.5', end: '192.168.2.5' },
-    { start: '194.0.0.0', end: '194.255.255.255' },
-    { start: '195.168.0.0', end: '195.168.255.255' },
-    { start: '196.168.1.0', end: '196.168.1.255' }
+    { start: '194.0.0.1', end: '194.255.255.254' },
+    { start: '195.168.0.1', end: '195.168.255.254' },
+    { start: '196.168.1.1', end: '196.168.1.254' }
   ], function (err, ipSet) {
     if (err) throw err
     checkList(t, ipSet)

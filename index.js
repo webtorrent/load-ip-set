@@ -5,7 +5,7 @@ var once = require('once')
 var split = require('split')
 var zlib = require('zlib')
 
-var CIDR = require('cidr-js')()
+var Netmask = require('netmask').Netmask
 
 /** this regex will math both IP ranges and single IPs, with or without a description */
 var ipSetRegex = /^(?:(\s*[^#].*?)\s*:\s*)?([a-f0-9.:]+?){1}(?:\s*-\s*([a-f0-9.:]+?)\s*)?$/
@@ -59,8 +59,8 @@ module.exports = function loadIPSet (input, opts, cb) {
     var bitMask = regexMatch[3]
 
     var ipRange = ip + '/' + bitMask
-    var range = CIDR.range(ipRange)
+    var range = new Netmask(ipRange)
 
-    return {start: range.start, end: range.end}
+    return {start: range.first, end: range.last}
   }
 }
