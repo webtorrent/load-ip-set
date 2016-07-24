@@ -5,7 +5,8 @@ var once = require('once')
 var split = require('split')
 var zlib = require('zlib')
 
-var blocklistRe = /^\s*[^#].*?\s*:\s*([a-f0-9.:]+?)\s*-\s*([a-f0-9.:]+?)\s*$/
+/** this regex will math both IP ranges and single IPs, with or without a description */
+var blocklistRe = /^(?:(\s*[^#].*?)\s*:\s*)?([a-f0-9.:]+?){1}(?:\s*-\s*([a-f0-9.:]+?)\s*)?$/
 
 module.exports = function loadIPSet (input, opts, cb) {
   if (typeof opts === 'function') {
@@ -36,7 +37,7 @@ module.exports = function loadIPSet (input, opts, cb) {
       .pipe(split())
       .on('data', function (line) {
         var match = blocklistRe.exec(line)
-        if (match) blocklist.push({ start: match[1], end: match[2] })
+        if (match) blocklist.push({start: match[2], end: match[3]})
       })
       .on('end', function () {
         cb(null, new IPSet(blocklist))
