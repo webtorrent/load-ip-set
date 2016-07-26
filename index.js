@@ -5,8 +5,13 @@ var once = require('once')
 var split = require('split')
 var zlib = require('zlib')
 
+var Netmask = require('netmask').Netmask
+
 /** this regex will math both IP ranges and single IPs, with or without a description */
-var blocklistRe = /^(?:(\s*[^#].*?)\s*:\s*)?([a-f0-9.:]+?){1}(?:\s*-\s*([a-f0-9.:]+?)\s*)?$/
+var ipSetRegex = /^(?:(\s*[^#].*?)\s*:\s*)?([a-f0-9.:]+?){1}(?:\s*-\s*([a-f0-9.:]+?)\s*)?$/
+
+/** this regex matches IPv4 ranges in the form A.B.C.D/E, with or without a description */
+var ipv4NetSetRegex = /^(?:(\s*[^#].*?)\s*:\s*)?([0-9.:]+?)\/([0-9]{1,2}){1}\s*$/
 
 module.exports = function loadIPSet (input, opts, cb) {
   if (typeof opts === 'function') {
@@ -36,11 +41,26 @@ module.exports = function loadIPSet (input, opts, cb) {
       .on('error', cb)
       .pipe(split())
       .on('data', function (line) {
-        var match = blocklistRe.exec(line)
-        if (match) blocklist.push({start: match[2], end: match[3]})
+        var match = ipSetRegex.exec(line)
+        if (match) {
+          blocklist.push({start: match[2], end: match[3]})
+        } else {
+          match = ipv4NetSetRegex.exec(line)
+          if (match) blocklist.push(parseIPRange(match))
+        }
       })
       .on('end', function () {
         cb(null, new IPSet(blocklist))
       })
+  }
+
+  function parseIPRange (regexMatch) {
+    var ip = regexMatch[2]
+    var bitMask = regexMatch[3]
+
+    var ipRange = ip + '/' + bitMask
+    var range = new Netmask(ipRange)
+
+    return {start: range.first, end: range.last}
   }
 }
