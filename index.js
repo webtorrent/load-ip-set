@@ -1,24 +1,23 @@
+module.exports = loadIPSet
+
 var fs = require('fs')
 var get = require('simple-get')
 var IPSet = require('ip-set')
+var Netmask = require('netmask').Netmask
 var once = require('once')
 var split = require('split')
 var zlib = require('zlib')
 
-var Netmask = require('netmask').Netmask
+// Match single IPs and IP ranges (IPv4 and IPv6), with or without a description
+var ipSetRegex = /^\s*(?:[^#].*?\s*:\s*)?([a-f0-9.:]+)(?:\s*-\s*([a-f0-9.:]+))?\s*$/
 
-/** this regex will math both IP ranges and single IPs, with or without a description */
-var ipSetRegex = /^(?:(\s*[^#].*?)\s*:\s*)?([a-f0-9.:]+?){1}(?:\s*-\s*([a-f0-9.:]+?)\s*)?$/
+// Match CIDR IPv4 ranges in the form A.B.C.D/E, with or without a description
+var cidrRegex = /^\s*(?:[^#].*?\s*:\s*)?([0-9.:]+)\/([0-9]{1,2})\s*$/
 
-/** this regex matches IPv4 ranges in the form A.B.C.D/E, with or without a description */
-var ipv4NetSetRegex = /^(?:(\s*[^#].*?)\s*:\s*)?([0-9.:]+?)\/([0-9]{1,2}){1}\s*$/
-
-module.exports = function loadIPSet (input, opts, cb) {
-  if (typeof opts === 'function') {
-    cb = opts
-    opts = {}
-  }
+function loadIPSet (input, opts, cb) {
+  if (typeof opts === 'function') return loadIPSet(input, {}, opts)
   cb = once(cb)
+
   if (Array.isArray(input) || !input) {
     process.nextTick(function () {
       cb(null, new IPSet(input))
@@ -43,24 +42,17 @@ module.exports = function loadIPSet (input, opts, cb) {
       .on('data', function (line) {
         var match = ipSetRegex.exec(line)
         if (match) {
-          blocklist.push({start: match[2], end: match[3]})
+          blocklist.push({start: match[1], end: match[2]})
         } else {
-          match = ipv4NetSetRegex.exec(line)
-          if (match) blocklist.push(parseIPRange(match))
+          match = cidrRegex.exec(line)
+          if (match) {
+            var range = new Netmask(match[1] + '/' + match[2])
+            blocklist.push({start: range.first, end: range.broadcast || range.last})
+          }
         }
       })
       .on('end', function () {
         cb(null, new IPSet(blocklist))
       })
-  }
-
-  function parseIPRange (regexMatch) {
-    var ip = regexMatch[2]
-    var bitMask = regexMatch[3]
-
-    var ipRange = ip + '/' + bitMask
-    var range = new Netmask(ipRange)
-
-    return {start: range.first, end: range.last}
   }
 }
