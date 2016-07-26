@@ -1,7 +1,7 @@
 {
   "name": "load-ip-set",
   "description": "download and parse ip-set (blocklist) files",
-  "version": "1.2.7",
+  "version": "1.3.0",
   "author": "Feross Aboukhadijeh <feross@feross.org> (http://feross.org/)",
   "browser": {
     "simple-get": false
