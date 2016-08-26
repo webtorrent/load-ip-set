@@ -17,7 +17,7 @@
     "split": "^1.0.0"
   },
   "devDependencies": {
-    "standard": "^7.0.0",
+    "standard": "*",
     "tape": "^4.0.0"
   },
   "homepage": "https://github.com/feross/load-ip-set",
