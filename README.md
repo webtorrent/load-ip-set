@@ -1,4 +1,4 @@
-# load-ip-set [![travis][travis-image]][travis-url] [![npm][npm-image]][npm-url] [![downloads][downloads-image]][downloads-url] [![javascript style guide][standard-image]][standard-url]
+# load-ip-set [![travis][travis-image]][travis-url] [![npm][npm-image]][npm-url] [![downloads][downloads-image]][downloads-url] [![javascript style guide][standard-image]][standard-url] [![Greenkeeper badge][greenkeeper-image]][greenkeeper-url]
 
 [travis-image]: https://img.shields.io/travis/webtorrent/load-ip-set/master.svg
 [travis-url]: https://travis-ci.org/webtorrent/load-ip-set
@@ -8,6 +8,8 @@
 [downloads-url]: https://npmjs.org/package/load-ip-set
 [standard-image]: https://img.shields.io/badge/code_style-standard-brightgreen.svg
 [standard-url]: https://standardjs.com
+[greenkeeper-image]: https://badges.greenkeeper.io/webtorrent/load-ip-set.svg
+[greenkeeper-url]: https://greenkeeper.io/
 
 #### download and parse ip-set (blocklist) files
 
