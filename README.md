@@ -13,13 +13,13 @@
 
 This module is used by [WebTorrent](http://webtorrent.io)!
 
-### install
+### Install
 
 ```
 npm install load-ip-set
 ```
 
-### usage
+### Usage
 
 Given one of the following:
 
@@ -30,8 +30,8 @@ Given one of the following:
 this module loads the ip set (downloading from the network, if necessary) and returns an [ip-set](https://www.npmjs.org/package/ip-set) object. An `ip-set` is just a mutable set data structure optimized for use with IPv4 and IPv6 addresses.
 
 ```js
-var loadIPSet = require('load-ip-set')
-loadIPSet('http://example.com/list.txt', function (err, ipSet) {
+const loadIPSet = require('load-ip-set')
+loadIPSet('http://example.com/list.txt', (err, ipSet) => {
   if (err) throw err
   ipSet.contains('1.2.3.4') //=> true
   ipSet.contains('2.2.2.2') //=> false
@@ -47,11 +47,11 @@ loadIPSet('http://example.com/list.txt', {
   headers: {
     'user-agent': 'WebTorrent (http://webtorrent.io)'
   }
-}, function (err, ipSet) {
+}, (err, ipSet) => {
 
 })
 ```
 
-### license
+### License
 
 MIT. Copyright (c) [Feross Aboukhadijeh](https://feross.org) and [WebTorrent, LLC](https://webtorrent.io).

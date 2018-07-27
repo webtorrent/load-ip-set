@@ -1,18 +1,18 @@
-var fs = require('fs')
-var http = require('http')
-var loadIPSet = require('../')
-var path = require('path')
-var test = require('tape')
-var zlib = require('zlib')
+const fs = require('fs')
+const http = require('http')
+const loadIPSet = require('../')
+const path = require('path')
+const test = require('tape')
+const zlib = require('zlib')
 
-test('array of IPs', function (t) {
+test('array of IPs', t => {
   t.plan(5)
-  loadIPSet([ '1.2.3.4' ], function (err, ipSet) {
+  loadIPSet([ '1.2.3.4' ], (err, ipSet) => {
     if (err) throw err
     t.ok(ipSet.contains('1.2.3.4'))
     t.ok(!ipSet.contains('1.1.1.1'))
   })
-  loadIPSet([ '1.2.3.4', '5.6.7.8' ], function (err, ipSet) {
+  loadIPSet([ '1.2.3.4', '5.6.7.8' ], (err, ipSet) => {
     if (err) throw err
     t.ok(ipSet.contains('1.2.3.4'))
     t.ok(ipSet.contains('5.6.7.8'))
@@ -55,7 +55,7 @@ function checkList (t, ipSet) {
   t.ok(!ipSet.contains('195.166.1.1'))
 }
 
-test('array of IP ranges', function (t) {
+test('array of IP ranges', t => {
   t.plan(27)
   loadIPSet([
     { start: '1.2.3.0', end: '1.2.3.255' },
@@ -66,21 +66,21 @@ test('array of IP ranges', function (t) {
     { start: '194.0.0.1', end: '194.255.255.255' },
     { start: '195.168.0.1', end: '195.168.255.255' },
     { start: '196.168.1.1', end: '196.168.1.255' }
-  ], function (err, ipSet) {
+  ], (err, ipSet) => {
     if (err) throw err
     checkList(t, ipSet)
   })
 })
 
-test('http url', function (t) {
+test('http url', t => {
   t.plan(27)
-  var server = http.createServer(function (req, res) {
+  const server = http.createServer((req, res) => {
     fs.createReadStream(path.join(__dirname, 'list.txt'))
       .pipe(res)
   })
-  server.listen(0, function () {
-    var url = 'http://127.0.0.1:' + server.address().port
-    loadIPSet(url, function (err, ipSet) {
+  server.listen(0, () => {
+    const url = `http://127.0.0.1:${server.address().port}`
+    loadIPSet(url, (err, ipSet) => {
       if (err) throw err
       checkList(t, ipSet)
       server.close()
@@ -88,18 +88,18 @@ test('http url', function (t) {
   })
 })
 
-test('http url (with custom user agent)', function (t) {
+test('http url (with custom user agent)', t => {
   t.plan(28)
-  var server = http.createServer(function (req, res) {
+  const server = http.createServer((req, res) => {
     t.equal(req.headers['user-agent'], 'WebTorrent (http://webtorrent.io)')
     fs.createReadStream(path.join(__dirname, 'list.txt'))
       .pipe(res)
   })
-  server.listen(0, function () {
-    var url = 'http://127.0.0.1:' + server.address().port
+  server.listen(0, () => {
+    const url = `http://127.0.0.1:${server.address().port}`
     loadIPSet(url, {
       headers: { 'user-agent': 'WebTorrent (http://webtorrent.io)' }
-    }, function (err, ipSet) {
+    }, (err, ipSet) => {
       if (err) throw err
       checkList(t, ipSet)
       server.close()
@@ -107,17 +107,17 @@ test('http url (with custom user agent)', function (t) {
   })
 })
 
-test('http url with gzip encoding', function (t) {
+test('http url with gzip encoding', t => {
   t.plan(27)
-  var server = http.createServer(function (req, res) {
+  const server = http.createServer((req, res) => {
     res.setHeader('content-encoding', 'gzip')
     fs.createReadStream(path.join(__dirname, 'list.txt'))
       .pipe(zlib.createGzip())
       .pipe(res)
   })
-  server.listen(0, function () {
-    var url = 'http://127.0.0.1:' + server.address().port
-    loadIPSet(url, function (err, ipSet) {
+  server.listen(0, () => {
+    const url = `http://127.0.0.1:${server.address().port}`
+    loadIPSet(url, (err, ipSet) => {
       if (err) throw err
       checkList(t, ipSet)
       server.close()
@@ -125,17 +125,17 @@ test('http url with gzip encoding', function (t) {
   })
 })
 
-test('http url with deflate encoding', function (t) {
+test('http url with deflate encoding', t => {
   t.plan(27)
-  var server = http.createServer(function (req, res) {
+  const server = http.createServer((req, res) => {
     res.setHeader('content-encoding', 'deflate')
     fs.createReadStream(path.join(__dirname, 'list.txt'))
       .pipe(zlib.createDeflate())
       .pipe(res)
   })
-  server.listen(0, function () {
-    var url = 'http://127.0.0.1:' + server.address().port
-    loadIPSet(url, function (err, ipSet) {
+  server.listen(0, () => {
+    const url = `http://127.0.0.1:${server.address().port}`
+    loadIPSet(url, (err, ipSet) => {
       if (err) throw err
       checkList(t, ipSet)
       server.close()
@@ -143,17 +143,17 @@ test('http url with deflate encoding', function (t) {
   })
 })
 
-test('fs path', function (t) {
+test('fs path', t => {
   t.plan(27)
-  loadIPSet(path.join(__dirname, 'list.txt'), function (err, ipSet) {
+  loadIPSet(path.join(__dirname, 'list.txt'), (err, ipSet) => {
     if (err) throw err
     checkList(t, ipSet)
   })
 })
 
-test('fs path with gzip', function (t) {
+test('fs path with gzip', t => {
   t.plan(27)
-  loadIPSet(path.join(__dirname, 'list.txt.gz'), function (err, ipSet) {
+  loadIPSet(path.join(__dirname, 'list.txt.gz'), (err, ipSet) => {
     if (err) throw err
     checkList(t, ipSet)
   })
