@@ -40,12 +40,12 @@ function loadIPSet (input, opts, cb) {
       .on('data', line => {
         let match = ipSetRegex.exec(line)
         if (match) {
-          blocklist.push({start: match[1], end: match[2]})
+          blocklist.push({ start: match[1], end: match[2] })
         } else {
           match = cidrRegex.exec(line)
           if (match) {
             const range = new Netmask(`${match[1]}/${match[2]}`)
-            blocklist.push({start: range.first, end: range.broadcast || range.last})
+            blocklist.push({ start: range.first, end: range.broadcast || range.last })
           }
         }
       })
