@@ -7,12 +7,12 @@ const zlib = require('zlib')
 
 test('array of IPs', t => {
   t.plan(5)
-  loadIPSet([ '1.2.3.4' ], (err, ipSet) => {
+  loadIPSet(['1.2.3.4'], (err, ipSet) => {
     if (err) throw err
     t.ok(ipSet.contains('1.2.3.4'))
     t.ok(!ipSet.contains('1.1.1.1'))
   })
-  loadIPSet([ '1.2.3.4', '5.6.7.8' ], (err, ipSet) => {
+  loadIPSet(['1.2.3.4', '5.6.7.8'], (err, ipSet) => {
     if (err) throw err
     t.ok(ipSet.contains('1.2.3.4'))
     t.ok(ipSet.contains('5.6.7.8'))
