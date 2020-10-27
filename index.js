@@ -1,3 +1,4 @@
+/*! load-ip-set. MIT License. WebTorrent LLC <https://webtorrent.io/opensource> */
 const fs = require('fs')
 const get = require('simple-get')
 const IPSet = require('ip-set')
