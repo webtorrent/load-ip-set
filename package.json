@@ -14,7 +14,7 @@
     "url": "https://github.com/webtorrent/load-ip-set/issues"
   },
   "dependencies": {
-    "ip-set": "^1.0.2",
+    "ip-set": "^2.1.0",
     "netmask": "^1.0.6",
     "once": "^1.4.0",
     "simple-get": "^4.0.0",
