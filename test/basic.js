@@ -1,9 +1,13 @@
-const fs = require('fs')
-const http = require('http')
-const loadIPSet = require('../')
-const path = require('path')
-const test = require('tape')
-const zlib = require('zlib')
+import fs from 'fs'
+import http from 'http'
+import loadIPSet from '../index.js'
+import path, { dirname } from 'path'
+import test from 'tape'
+import zlib from 'zlib'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 test('array of IPs', t => {
   t.plan(5)

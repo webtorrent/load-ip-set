@@ -30,7 +30,7 @@ Given one of the following:
 this module loads the ip set (downloading from the network, if necessary) and returns an [ip-set](https://www.npmjs.org/package/ip-set) object. An `ip-set` is just a mutable set data structure optimized for use with IPv4 and IPv6 addresses.
 
 ```js
-const loadIPSet = require('load-ip-set')
+import loadIPSet from 'load-ip-set'
 loadIPSet('http://example.com/list.txt', (err, ipSet) => {
   if (err) throw err
   ipSet.contains('1.2.3.4') //=> true
