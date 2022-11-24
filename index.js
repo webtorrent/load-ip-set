@@ -1,11 +1,11 @@
 /*! load-ip-set. MIT License. WebTorrent LLC <https://webtorrent.io/opensource> */
-const fs = require('fs')
-const get = require('simple-get')
-const IPSet = require('ip-set')
-const Netmask = require('netmask').Netmask
-const once = require('once')
-const split = require('split')
-const zlib = require('zlib')
+import fs from 'fs'
+import get from 'simple-get'
+import IPSet from 'ip-set'
+import { Netmask } from 'netmask'
+import once from 'once'
+import split from 'split'
+import zlib from 'zlib'
 
 // Match single IPs and IP ranges (IPv4 and IPv6), with or without a description
 const ipSetRegex = /^\s*(?:[^#].*?\s*:\s*)?([a-f0-9.:]+)(?:\s*-\s*([a-f0-9.:]+))?\s*$/
@@ -56,4 +56,4 @@ function loadIPSet (input, opts, cb) {
   }
 }
 
-module.exports = loadIPSet
+export default loadIPSet
