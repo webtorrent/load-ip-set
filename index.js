@@ -1,11 +1,12 @@
 /*! load-ip-set. MIT License. WebTorrent LLC <https://webtorrent.io/opensource> */
 import fs from 'fs'
-import get from 'simple-get'
+import fetch from 'cross-fetch-ponyfill'
 import IPSet from 'ip-set'
 import { Netmask } from 'netmask'
 import once from 'once'
 import split from 'split'
 import zlib from 'zlib'
+import queueMicrotask from 'queue-microtask'
 
 // Match single IPs and IP ranges (IPv4 and IPv6), with or without a description
 const ipSetRegex = /^\s*(?:[^#].*?\s*:\s*)?([a-f0-9.:]+)(?:\s*-\s*([a-f0-9.:]+))?\s*$/
@@ -13,24 +14,43 @@ const ipSetRegex = /^\s*(?:[^#].*?\s*:\s*)?([a-f0-9.:]+)(?:\s*-\s*([a-f0-9.:]+))
 // Match CIDR IPv4 ranges in the form A.B.C.D/E, with or without a description
 const cidrRegex = /^\s*(?:[^#].*?\s*:\s*)?([0-9.:]+)\/([0-9]{1,2})\s*$/
 
-function loadIPSet (input, opts, cb) {
+async function loadIPSet (input, opts, cb) {
   if (typeof opts === 'function') return loadIPSet(input, {}, opts)
   cb = once(cb)
 
   if (Array.isArray(input) || !input) {
-    process.nextTick(() => {
+    queueMicrotask(() => {
       cb(null, new IPSet(input))
     })
   } else if (/^https?:\/\//.test(input)) {
-    opts.url = input
-    get(opts, (err, res) => {
-      if (err) return cb(err)
-      onStream(res)
-    })
+    let res = null
+    try {
+      res = await fetch(input, opts)
+    } catch (err) {
+      return cb(err)
+    }
+    const text = await res.text()
+    const blocklist = []
+    for (const line of text.split('\n')) {
+      handleLine(line, blocklist)
+    }
+    cb(null, new IPSet(blocklist))
   } else {
     let f = fs.createReadStream(input).on('error', cb)
     if (/.gz$/.test(input)) f = f.pipe(zlib.Gunzip())
     onStream(f)
+  }
+  function handleLine (line, blocklist) {
+    let match = ipSetRegex.exec(line)
+    if (match) {
+      blocklist.push({ start: match[1], end: match[2] })
+    } else {
+      match = cidrRegex.exec(line)
+      if (match) {
+        const range = new Netmask(`${match[1]}/${match[2]}`)
+        blocklist.push({ start: range.first, end: range.broadcast || range.last })
+      }
+    }
   }
 
   function onStream (stream) {
@@ -39,16 +59,7 @@ function loadIPSet (input, opts, cb) {
       .on('error', cb)
       .pipe(split())
       .on('data', line => {
-        let match = ipSetRegex.exec(line)
-        if (match) {
-          blocklist.push({ start: match[1], end: match[2] })
-        } else {
-          match = cidrRegex.exec(line)
-          if (match) {
-            const range = new Netmask(`${match[1]}/${match[2]}`)
-            blocklist.push({ start: range.first, end: range.broadcast || range.last })
-          }
-        }
+        handleLine(line, blocklist)
       })
       .on('end', () => {
         cb(null, new IPSet(blocklist))
