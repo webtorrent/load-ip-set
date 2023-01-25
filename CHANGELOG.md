@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/webtorrent/load-ip-set/compare/v3.0.0...v3.0.1) (2023-01-25)
+
+
+### Performance Improvements
+
+* drop simple-get ([cff6579](https://github.com/webtorrent/load-ip-set/commit/cff6579f0b4518bb21cf092a326cbd14db1b819e))
+
 # [3.0.0](https://github.com/webtorrent/load-ip-set/compare/v2.2.1...v3.0.0) (2022-11-24)
 
 
