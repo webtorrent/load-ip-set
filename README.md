@@ -1,6 +1,6 @@
 # load-ip-set [![ci][ci-image]][ci-url] [![npm][npm-image]][npm-url] [![downloads][downloads-image]][downloads-url] [![javascript style guide][standard-image]][standard-url]
 
-[ci-image]: https://img.shields.io/github/workflow/status/webtorrent/load-ip-set/ci/master
+[ci-image]: https://github.com/webtorrent/load-ip-set/actions/workflows/ci.yml/badge.svg?branch=master
 [ci-url]: https://github.com/webtorrent/load-ip-set/actions
 [npm-image]: https://img.shields.io/npm/v/load-ip-set.svg
 [npm-url]: https://npmjs.org/package/load-ip-set
