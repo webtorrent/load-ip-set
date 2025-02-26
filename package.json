@@ -16,7 +16,7 @@
   "type": "module",
   "dependencies": {
     "cross-fetch-ponyfill": "^1.0.1",
-    "ip-set": "^2.1.0",
+    "ip-set": "^3.0.0",
     "netmask": "^2.0.1",
     "once": "^1.4.0",
     "queue-microtask": "^1.2.3",
