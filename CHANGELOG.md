@@ -1,3 +1,11 @@
+## [3.0.2](https://github.com/webtorrent/load-ip-set/compare/v3.0.1...v3.0.2) (2026-05-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ip-set to v3 ([#67](https://github.com/webtorrent/load-ip-set/issues/67)) ([a377a70](https://github.com/webtorrent/load-ip-set/commit/a377a7038a51310cd9b0b87308ee05d67f6e0ff5))
+* **release:** Update release workflow with necessary permissions ([d1e4a1b](https://github.com/webtorrent/load-ip-set/commit/d1e4a1b4ef2d14cff38a190a8f52c025d07f1d00))
+
 ## [3.0.1](https://github.com/webtorrent/load-ip-set/compare/v3.0.0...v3.0.1) (2023-01-25)
 
 
